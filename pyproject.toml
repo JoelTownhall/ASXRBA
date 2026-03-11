@@ -21,6 +21,10 @@ dependencies = [
 
     # - internet
     "requests",
+
+    # - webapp
+    "streamlit",
+    "plotly",
 ]
 
 [tool.ruff]
