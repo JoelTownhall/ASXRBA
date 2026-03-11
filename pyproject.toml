@@ -2,7 +2,7 @@
 name = "asx"
 version = "0.0.0"
 description = "Capture and plot ASX rate tracker data for RBA cash rate expectations"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.11"
 dependencies = [
     # - Jupyter notebooks
     "ipykernel",
