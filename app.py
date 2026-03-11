@@ -383,7 +383,7 @@ def main() -> None:
     with tab1:
         st.plotly_chart(
             chart_anticipated(df, rba_monthly, str(anticipated_start)),
-            use_container_width=True,
+            width="stretch",
         )
         st.caption(
             "Each line shows the market-implied cash rate path for each day the data was captured. "
@@ -393,12 +393,12 @@ def main() -> None:
     with tab2:
         st.plotly_chart(
             chart_end_of_month(df, rba_monthly, eom_from),
-            use_container_width=True,
+            width="stretch",
         )
         st.caption("End-of-month snapshots of the market-implied rate path, plotted against the actual RBA cash rate.")
 
     with tab3:
-        st.plotly_chart(chart_endpoint(df, rba_daily), use_container_width=True)
+        st.plotly_chart(chart_endpoint(df, rba_daily), width="stretch")
         st.caption(
             "The furthest-forward implied rate from each day's ASX data, shifted 18 months forward in time, "
             "plotted against the actual RBA cash rate."
@@ -411,7 +411,7 @@ def main() -> None:
             index=0,
             key="cut_start",
         )
-        st.plotly_chart(chart_next_cut(df, rba_daily, cut_start), use_container_width=True)
+        st.plotly_chart(chart_next_cut(df, rba_daily, cut_start), width="stretch")
         st.caption("The first month in which the market fully prices in a 25bp cut from the prevailing RBA cash rate.")
 
     with tab5:
@@ -421,7 +421,7 @@ def main() -> None:
             index=0,
             key="hike_start",
         )
-        st.plotly_chart(chart_next_hike(df, rba_daily, hike_start), use_container_width=True)
+        st.plotly_chart(chart_next_hike(df, rba_daily, hike_start), width="stretch")
         st.caption("The first month in which the market fully prices in a 25bp hike above the prevailing RBA cash rate.")
 
     # Data table expander
@@ -429,7 +429,7 @@ def main() -> None:
         display_df = df.copy()
         display_df.index = display_df.index.astype(str)
         display_df.columns = display_df.columns.astype(str)
-        st.dataframe(display_df.tail(30), use_container_width=True)
+        st.dataframe(display_df.tail(30), width="stretch")
         st.caption(f"Showing last 30 rows of {len(df)} total. Rows = scrape dates, columns = forecast months.")
 
 
