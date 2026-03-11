@@ -1,0 +1,46 @@
+name: Daily ASX Data Capture
+
+on:
+  schedule:
+    # 10:01 PM AEST (12:01 PM UTC) Mon-Fri
+    # During AEDT (Oct-Apr) this is 11:01 AM UTC - adjust if needed
+    - cron: "01 12 * * 1-5"
+  workflow_dispatch: # allow manual trigger
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Capture daily ASX data
+        run: uv run python asx_daily_data_capture.py
+
+      - name: Run reporting notebook
+        run: uv run jupyter nbconvert --to notebook --execute ASX-rate-tracker-reporting.ipynb --output ASX-rate-tracker-reporting.ipynb
+
+      - name: Commit and push new data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ASX_DAILY_DATA/ ASX-COMBINED/ CHARTS/ ASX-rate-tracker-reporting.ipynb
+          git diff --cached --quiet || git commit -m "Daily ASX data capture $(date +%Y-%m-%d)"
+          git push
